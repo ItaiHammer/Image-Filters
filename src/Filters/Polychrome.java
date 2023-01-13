@@ -1,5 +1,7 @@
 package Filters;
 
+import javax.swing.JOptionPane;
+
 import Interfaces.PixelFilter;
 import core.DImage;
 
@@ -8,7 +10,7 @@ public class Polychrome implements PixelFilter {
     private int colorCount;
 
     public Polychrome() {
-        colorCount = 4;
+        colorCount = Integer.parseInt(JOptionPane.showInputDialog(null, "How many Shades?"));
         divider = (double)(255)/(double)(colorCount);
     }
 
