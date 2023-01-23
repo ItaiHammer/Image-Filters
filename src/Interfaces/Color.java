@@ -74,6 +74,33 @@ public class Color {
         return letter;
     }
 
+    public double[] getHSL() {
+        double[] hsl = new double[3];
+        double rd = (double) r/255;
+        double gd = (double) g/255;
+        double bd = (double) b/255;
+        double max = Math.max(Math.max(rd, gd), bd);
+        double min = Math.min(Math.min(rd, gd), bd);
+        double h, s, l = (max + min) / 2;
+    
+        if(max == min) {
+            h = 0;
+        } else if (max == rd && gd >= bd) {
+            h = 60 * (gd - bd) / (max - min);
+        } else if (max == rd && gd < bd) {
+            h = 60 * (gd - bd) / (max - min) + 360;
+        } else if (max == gd) {
+            h = 60 * (bd - rd) / (max - min) + 120;
+        } else {
+            h = 60 * (rd - gd) / (max - min) + 240;
+        }
+        s = (max == 0) ? 0 : (1 - (min/max));
+        hsl[0] = h;
+        hsl[1] = s;
+        hsl[2] = l;
+        return hsl;
+    }
+
     public int checkRGBBounderies (int value) {
         int newValue = value;
 
