@@ -44,7 +44,8 @@ public class BetterDownsamplingColor implements PixelFilter {
             }
         }
 
-        img.setColorChannels(finalRed, finalGreen, finalBlue);
-        return img;
+        DImage output = new DImage( finalBlue[0].length, finalBlue.length);
+        output.setColorChannels(finalRed, finalGreen, finalBlue);
+        return output;
     }
 }

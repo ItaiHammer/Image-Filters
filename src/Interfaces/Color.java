@@ -1,8 +1,8 @@
 package Interfaces;
 
 public class Color {
-    int r, g, b;
-    double a;
+    private int r, g, b;
+    private double a;
 
     public Color (int r1, int g1, int b1, double a1) {
         r = checkRGBBounderies(r1);
@@ -17,6 +17,24 @@ public class Color {
         g = checkRGBBounderies(g1);
         b = checkRGBBounderies(b1);
         a = 1;
+    }
+
+    public void setRGB (int r2, int g2, int b2) {
+        r = r2;
+        g = g2;
+        b = b2;
+    }
+
+    public void setR (int r2) {
+        r = r2;
+    }
+
+    public void setG (int g2) {
+        g = g2;
+    }
+
+    public void setB (int b2) {
+        b = b2;
     }
     
     public String getHex () {
@@ -125,8 +143,23 @@ public class Color {
         return newAplha;
     }
 
-    @Override
+    public int R() {
+        return r;
+    }
+    
+    public int G() {
+        return g;
+    }
+    
+    public int B() {
+        return b;
+    }
+
+    public double A () {
+        return a;
+    }
+
     public String toString() {
-        return "(, "+r+", "+g+", "+b+", "+a+")";
+        return "("+r+", "+g+", "+b+", "+a+")";
     }
 }
