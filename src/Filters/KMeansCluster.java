@@ -21,25 +21,20 @@ public class KMeansCluster implements PixelFilter {
         short[][] red = img.getRedChannel();
         short[][] green = img.getGreenChannel();
         short[][] blue = img.getBlueChannel();
-        
-        System.out.println("kak1");
 
+
+        // init
         ArrayList<Cluster> clusters = initClusters();
-
-        System.out.println("kak2");
-
         ArrayList<Color> points = makePointsList(red, green, blue);
-        
-        System.out.println("kak3");
 
         for (int i = 0; i < 10; i++) {
+            // moving clusters around
             clearClusters(clusters);
             assignPointsToClusters(clusters, points);
             recalculateClustersCenters(clusters);
         }
 
-        System.out.println(clusters.size());
-
+        // setting pixels to cluster colors
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[r].length; c++) {
                 Color newColor = getNewColor(clusters, red[r][c], green[r][c], blue[r][c]);
