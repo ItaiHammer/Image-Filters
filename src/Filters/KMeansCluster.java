@@ -22,19 +22,21 @@ public class KMeansCluster implements PixelFilter {
         short[][] green = img.getGreenChannel();
         short[][] blue = img.getBlueChannel();
 
-
         // init
         ArrayList<Cluster> clusters = initClusters();
+
         ArrayList<Color> points = makePointsList(red, green, blue);
 
-        for (int i = 0; i < 10; i++) {
-            // moving clusters around
+        boolean stable = false;
+
+        while (!stable) {
             clearClusters(clusters);
             assignPointsToClusters(clusters, points);
             recalculateClustersCenters(clusters);
+
+            stable = areAllClustersStable(clusters);
         }
 
-        // setting pixels to cluster colors
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[r].length; c++) {
                 Color newColor = getNewColor(clusters, red[r][c], green[r][c], blue[r][c]);
@@ -46,6 +48,19 @@ public class KMeansCluster implements PixelFilter {
 
         img.setColorChannels(red, green, blue);
         return img;
+    }
+
+    private boolean areAllClustersStable(ArrayList<Cluster> clusters) {
+        boolean stable = true;
+        for (Cluster c : clusters) {
+            if (!c.isStable()) {
+                stable = false;
+            }
+        }
+
+        System.out.println("All clusters are stable: "+stable);
+
+        return stable;
     }
 
     private void clearClusters(ArrayList<Cluster> clusters) {
