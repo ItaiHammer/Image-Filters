@@ -58,7 +58,7 @@ public class KMeansCluster implements PixelFilter {
             }
         }
 
-        System.out.println("All clusters are stable: "+stable);
+        // System.out.println("All clusters are stable: "+stable);
 
         return stable;
     }

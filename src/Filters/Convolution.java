@@ -12,10 +12,18 @@ public class Convolution implements PixelFilter {
         kernalType = JOptionPane.showInputDialog(null, "Choose Kernal Type:");
     }
 
+    public Convolution (String k) {
+        kernalType = k;
+    }
+
     public DImage processImage (DImage img) {
         short[][] red = img.getRedChannel();
         short[][] green = img.getGreenChannel();
         short[][] blue = img.getBlueChannel();
+
+        short[][] newRed = img.getRedChannel();
+        short[][] newGreen = img.getGreenChannel();
+        short[][] newBlue = img.getBlueChannel();
 
         short[][] BWGrid = img.getBWPixelGrid();
 
@@ -35,11 +43,11 @@ public class Convolution implements PixelFilter {
         // for each pixel of the new grid
         for (int r = 0; r < red.length; r++) {
             for (int c = 0; c < red[r].length; c++) {
-                red[r][c] = applyKernal(red, r, c, kernal);
+                newRed[r][c] = applyKernal(red, r, c, kernal);
                 
-                green[r][c] = applyKernal(green, r, c, kernal);
+                newGreen[r][c] = applyKernal(green, r, c, kernal);
                 
-                blue[r][c] = applyKernal(blue, r, c, kernal);
+                newBlue[r][c] = applyKernal(blue, r, c, kernal);
 
                 // BWGrid[r][c] = applyKernal(BWGrid, r, c, kernal);
             }
@@ -52,11 +60,11 @@ public class Convolution implements PixelFilter {
 
     private short applyKernal(short[][] color, int r, int c, double[][] kernal) {
         double averageWeighted = 0;
-        if (r - 1 > 0 && r + 1 < color.length && c - 1 > 0 && c + 1 < color[0].length) {
+        if (r + 1 < color.length - (int)(kernal.length) && c + 1 < color[0].length - (int)(kernal[0].length)) {
             // in the bounds
 
             // adding up weighted colors
-            averageWeighted = getAvarageWeighted(kernal, color, r, c);
+            averageWeighted = getAvarageWeighted(kernal, color, r, c, getTotalKernalValue(kernal));
             
             // clipping
             averageWeighted = clipColor(averageWeighted);
@@ -77,22 +85,29 @@ public class Convolution implements PixelFilter {
         return clipped;
     }
 
-    private double getAvarageWeighted(double[][] kernal, short[][] color, int r, int c) {
+    private double getAvarageWeighted(double[][] kernal, short[][] color, int r, int c, double totalKernal) {
+        
+        // System.out.println("---------------------------------------------------------------");
         double averageWeighted = 0;
 
-
-        for (int i = r-1; i < r + kernal.length-1; i++) {
-            for (int j = c-1; j < c + kernal[0].length-1; j++) {
-                averageWeighted += color[i][j] * kernal[i-r+1][j-c+1];
+        for (int i = r; i < r+(int)(kernal.length); i++) {
+            for (int j = c; j < c+(int)(kernal[0].length); j++) {
+                // System.out.println("--------------------------");
+                // System.out.println("Color: "+color[i][j]);
+                // System.out.println("Kernal: "+kernal[i-r][j-c]);
+                // System.out.println("Color: "+(color[i][j] * kernal[i-r][j-c]));
+                averageWeighted += (color[i][j] * kernal[i-r][j-c]);
             }
         }
 
-        // getting total kernal value
-        double totalKernal = getTotalKernalValue(kernal);
+        // System.out.println("Before Division: "+averageWeighted);
+        // System.out.println("Total Kernal: "+totalKernal);
         
         // dividing
-        averageWeighted = averageWeighted / (totalKernal == 0 ? 1 : totalKernal);
+        averageWeighted = (double)(averageWeighted) / (double)(totalKernal == 0 ? 1 : totalKernal);
+        // System.out.println("Final: "+averageWeighted);
 
+        averageWeighted *= 5;
         return averageWeighted;
     }
 

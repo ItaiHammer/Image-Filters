@@ -43,9 +43,9 @@ public class Cluster {
 
         if (oldCenter.R() == center.R() && oldCenter.G() == center.G() && oldCenter.B() == center.B()) {
             stable = true;
-            System.out.println("Stable");
+            // System.out.println("Stable");
         }else {
-            System.out.println("Not stable, old: "+oldCenter+", new: "+center);
+            // System.out.println("Not stable, old: "+oldCenter+", new: "+center);
         }
     }
 
